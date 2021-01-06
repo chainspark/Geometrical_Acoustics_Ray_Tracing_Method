@@ -1,8 +1,5 @@
 #include "Ray_Tracing_Algorithm.h"
 
-box::box() {
-	width = 0; length = 0; height = 0;
-}
 
 void box::generate_box_room()
 {
@@ -42,16 +39,6 @@ void box::generate_box_room()
 	box_plane[5] = generate_plane(c7, c5, c6);//top
 
 	cout << "Shoe-box room environment generated \n";
-}
-
-ray::ray(void)
-{
-	ray_count++;
-}
-
-ray::~ray(void)
-{
-	ray_count--;
 }
 
 
@@ -121,15 +108,6 @@ void source::delete_source(void) {
 	source_count--;
 }
 
-source::source(void)
-{
-	source_count++;
-	cout << "Source Created \n";
-}
-
-source::~source(void)
-{
-}
 
 void receiver::reset(void)
 {
@@ -143,8 +121,7 @@ void receiver::reset(void)
 
 double dotProduct(vec3 vect_A, vec3 vect_B)
 {
-	double dot_product = 0;
-	dot_product = vect_A.x * vect_B.x + vect_A.y * vect_B.y + vect_A.z * vect_B.z;
+	double dot_product = static_cast<double>(vect_A.x * vect_B.x + vect_A.y * vect_B.y + vect_A.z * vect_B.z);
 	return dot_product;
 }
 

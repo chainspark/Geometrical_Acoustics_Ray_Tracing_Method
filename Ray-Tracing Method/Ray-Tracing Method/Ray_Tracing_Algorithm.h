@@ -64,6 +64,9 @@ public:
 		mul.imaginary = (this->imaginary) * B.real + (this->real) * B.imaginary;
 		return mul;
 	}
+
+	complex() = default;
+	complex(const float i) :real(i), imaginary(i) {}
 };
 
 class vec3
@@ -91,19 +94,22 @@ public:
 
 	vec3 operator * (const double& B) {
 		vec3 mul;
-		mul.x = (this->x) * (float)B;
-		mul.y = (this->y) * (float)B;
-		mul.z = (this->z) * (float)B;
+		mul.x = (this->x) * static_cast<float>(B);
+		mul.y = (this->y) * static_cast<float>(B);
+		mul.z = (this->z) * static_cast<float>(B);
 		return mul;
 	}
 
 	vec3 operator / (const double& B) {
 		vec3 div;
-		div.x = (this->x) / (float)B;
-		div.y = (this->y) / (float)B;
-		div.z = (this->z) / (float)B;
+		div.x = (this->x) / static_cast<float>(B);
+		div.y = (this->y) / static_cast<float>(B);
+		div.z = (this->z) / static_cast<float>(B);
 		return div;
 	}
+
+	vec3() = default;
+	vec3(const float i) :x(i), y(i), z(i) {}
 };
 
 class plane
@@ -116,6 +122,8 @@ public:
 	complex R_coeff;
 
 	bool label = 0;
+
+	plane():normal(0),point(0),D(0),R_coeff(0) {}
 };
 
 class box
@@ -124,7 +132,8 @@ public:
 	float width, length, height;
 	plane box_plane[6];
 	void generate_box_room();
-	box();
+	
+	box():width(0), length(0), height(0) {}
 };
 
 
@@ -140,8 +149,13 @@ public:
 	vec3 calc_pt;
 	double pressure_square;
 
-	ray(void) ;
-	~ray(void);
+	ray() :theta(), phi(), direction(), isource_position(), R_eff(), calc_pt(), pressure_square()
+	{
+		ray_count++;
+	}
+	~ray(){
+			ray_count--;
+	};
 };
 
 
@@ -151,19 +165,21 @@ class source
 public:
 	static int source_count;
 	unsigned long int number_of_rays = 0;
-	double power_db; // Source Power in Decibels
-	double power; // Source Power in Watts
-	double A;
-	double wavelength;
-	double frequency;
-	vec3 position;
-	ray* rays; // Pointer to array of class ray 
+	double power_db{}; // Source Power in Decibels
+	double power{}; // Source Power in Watts
+	double A{};
+	double wavelength{};
+	double frequency{};
+	vec3 position{};
+	ray* rays{}; // Pointer to array of class ray 
 
 	void generate_source(void);
 	void delete_source(void);
 	void reset_rays(void);
-	source(void);
-	~source(void);
+	source(void) {
+		source_count++;
+		cout << "Source Created \n";
+	}	
 };
 
 class receiver

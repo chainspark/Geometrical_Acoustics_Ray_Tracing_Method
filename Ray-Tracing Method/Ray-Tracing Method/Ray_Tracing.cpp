@@ -44,9 +44,9 @@ int main()
 	
 	//Generate source
 	source source1;
-	source1.number_of_rays = 5*1.0e6;
-	source1.position.x = room.length / 2.0;
-	source1.position.y = room.width / 2.0;
+	source1.number_of_rays = static_cast<unsigned long>(5*1.0e6);
+	source1.position.x = room.length / (2.0f);
+	source1.position.y = room.width / (2.0f);
 	source1.position.z = 3.0;
 
 	source1.power_db = 100;
