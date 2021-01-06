@@ -6,7 +6,7 @@
 #include <fstream>
 #include <chrono>
 
-#include "Ray_Tracing_Rev3.h"
+#include "Ray_Tracing_Algorithm.h"
 
 using namespace std;
 
@@ -51,9 +51,9 @@ int main()
 	
 	//Generate Source
 	source source1;
-	source1.number_of_rays = 1*1.0e6;
-	source1.position.x = room.length / 2.0;
-	source1.position.y = room.width / 2.0;
+	source1.number_of_rays = static_cast<unsigned long>(1*1.0e6);
+	source1.position.x = room.length / 2.0f;
+	source1.position.y = room.width / 2.0f;
 	source1.position.z = 3.0;
 
 	source1.power_db = 100;
