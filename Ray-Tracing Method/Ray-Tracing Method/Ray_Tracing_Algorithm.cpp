@@ -1,5 +1,6 @@
 #include "Ray_Tracing_Algorithm.h"
 
+//Added Google Test
 
 void box::generate_box_room()
 {

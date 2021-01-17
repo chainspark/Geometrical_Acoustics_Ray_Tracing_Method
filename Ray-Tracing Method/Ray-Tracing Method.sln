@@ -1,13 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27428.2037
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30523.141
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Ray-Tracing Method", "Ray-Tracing Method\Ray-Tracing Method.vcxproj", "{9481ABFA-D79F-4366-B03E-A8D97729C28D}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Case I", "..\Case I\Case I.vcxproj", "{1E852815-F064-4199-ABD4-1102D12EF8D6}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Case II", "..\Case II\Case II.vcxproj", "{E7BCECEB-2153-4A11-A4A1-DFF8AAEEC729}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Unit Tests", "Unit Tests\Unit Tests.vcxproj", "{677B42B0-58F6-4A95-AB1C-C3398B2771A6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +43,14 @@ Global
 		{E7BCECEB-2153-4A11-A4A1-DFF8AAEEC729}.Release|x64.Build.0 = Release|x64
 		{E7BCECEB-2153-4A11-A4A1-DFF8AAEEC729}.Release|x86.ActiveCfg = Release|Win32
 		{E7BCECEB-2153-4A11-A4A1-DFF8AAEEC729}.Release|x86.Build.0 = Release|Win32
+		{677B42B0-58F6-4A95-AB1C-C3398B2771A6}.Debug|x64.ActiveCfg = Debug|x64
+		{677B42B0-58F6-4A95-AB1C-C3398B2771A6}.Debug|x64.Build.0 = Debug|x64
+		{677B42B0-58F6-4A95-AB1C-C3398B2771A6}.Debug|x86.ActiveCfg = Debug|Win32
+		{677B42B0-58F6-4A95-AB1C-C3398B2771A6}.Debug|x86.Build.0 = Debug|Win32
+		{677B42B0-58F6-4A95-AB1C-C3398B2771A6}.Release|x64.ActiveCfg = Release|x64
+		{677B42B0-58F6-4A95-AB1C-C3398B2771A6}.Release|x64.Build.0 = Release|x64
+		{677B42B0-58F6-4A95-AB1C-C3398B2771A6}.Release|x86.ActiveCfg = Release|Win32
+		{677B42B0-58F6-4A95-AB1C-C3398B2771A6}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
