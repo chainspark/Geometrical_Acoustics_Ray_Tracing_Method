@@ -8,6 +8,7 @@
 long int ray::ray_count = 0;
 int source::source_count = 0;
 
+//TODO : Add all unit tests
 	TEST(GenerateRoom, RoomTest) {
 
 		box room;
