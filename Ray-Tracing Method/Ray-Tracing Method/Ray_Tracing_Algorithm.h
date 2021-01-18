@@ -108,8 +108,13 @@ public:
 		return div;
 	}
 
+	bool operator == (const vec3 B) {
+		return (this->x == B.x && this->y == B.y && this->z == B.z);
+	}
+
 	vec3() = default;
 	vec3(const float i) :x(i), y(i), z(i) {}
+	vec3(const float i,const float j,const float k) :x(i), y(j), z(k) {}
 };
 
 class plane
