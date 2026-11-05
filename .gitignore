@@ -360,3 +360,11 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+# ---- CMake / Emscripten builds ----
+build*/
+out/
+CMakeUserPresets.json
+.vs/
+compile_commands.json
+*.csv
+!docs/data/*.csv
