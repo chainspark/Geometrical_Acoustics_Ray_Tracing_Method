@@ -123,13 +123,20 @@
     <section class="panel heat">
       <div class="panel-head">
         <h2>SPL map</h2>
-        <div class="seg" role="radiogroup" aria-label="Map quantity">
-          <button type="button" data-map="rt" class="on">Ray traced</button>
-          <button type="button" data-map="an">Image source</button>
-          <button type="button" data-map="err">Difference</button>
+        <div class="head-controls">
+          <div class="seg" role="radiogroup" aria-label="Map style">
+            <button type="button" data-view="2d">2D</button>
+            <button type="button" data-view="3d" class="on">3D</button>
+          </div>
+          <div class="seg" role="radiogroup" aria-label="Map quantity">
+            <button type="button" data-map="rt" class="on">Ray traced</button>
+            <button type="button" data-map="an">Image source</button>
+            <button type="button" data-map="err">Difference</button>
+          </div>
         </div>
       </div>
-      <div class="canvas-host"><canvas id="heatmap"></canvas><div class="tip" id="heatTip" hidden></div></div>
+      <div class="canvas-host" id="heatHost" hidden><canvas id="heatmap"></canvas><div class="tip" id="heatTip" hidden></div></div>
+      <div class="canvas-host surface-host" id="surfaceHost"><span class="hint-overlay">drag to rotate · scroll to zoom</span></div>
     </section>
 
     <section class="panel chart">

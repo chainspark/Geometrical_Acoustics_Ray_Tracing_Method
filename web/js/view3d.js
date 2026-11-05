@@ -169,7 +169,10 @@ export class RoomView {
 
   /** Uses the heatmap's offscreen canvas as the slice texture. */
   setSliceImage(canvas) {
-    if (!this.texture || this.texture.image !== canvas) {
+    // A WebGL texture can't change size in place: recreate it when the grid size changes.
+    const dims = `${canvas.width}x${canvas.height}`;
+    if (!this.texture || this.texture.image !== canvas || this.textureDims !== dims) {
+      this.textureDims = dims;
       this.texture?.dispose();
       this.texture = new THREE.CanvasTexture(canvas);
       this.texture.magFilter = THREE.NearestFilter;

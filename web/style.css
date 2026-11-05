@@ -120,6 +120,18 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
 .walls .mag output { font-family: var(--mono); font-size: 12px; width: 32px; text-align: right; }
 .walls .hdr { font-size: 11px; color: var(--muted); }
 
+/* ---- 3D surface plot ---- */
+.canvas-host[hidden] { display: none; }
+.head-controls { display: flex; gap: 8px; flex-wrap: wrap; }
+.surface-host { overflow: hidden; }
+.surface-host canvas { cursor: grab; }
+.axis-label { font: 11px system-ui, sans-serif; color: var(--muted); white-space: nowrap; }
+.axis-label.title { color: var(--ink); font-weight: 600; }
+.hint-overlay {
+  position: absolute; right: 10px; bottom: 8px; z-index: 2; pointer-events: none;
+  font-size: 11px; color: var(--muted);
+}
+
 /* ---- segmented control ---- */
 .seg { display: inline-flex; border: 1px solid var(--line); border-radius: 7px; overflow: hidden; }
 .seg button { border: 0; border-radius: 0; padding: 4px 10px; font-size: 12px; background: transparent; }

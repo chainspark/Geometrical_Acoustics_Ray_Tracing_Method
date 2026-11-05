@@ -24,6 +24,24 @@ heatmap.onImage = (img) => view?.setSliceImage(img);
 
 let state = clone(PRESETS[DEFAULT_PRESET].state);
 let mapMode = 'rt';
+let mapView = '3d'; // '2d' heat map or '3d' surface
+let surface = null; // SplSurface, loaded on first use
+
+function setMapView(view) {
+  mapView = view;
+  try { localStorage.setItem('gart.mapView', view); } catch { /* storage unavailable */ }
+  for (const b of document.querySelectorAll('[data-view]')) b.classList.toggle('on', b.dataset.view === view);
+  $('heatHost').hidden = view !== '2d';
+  $('surfaceHost').hidden = view !== '3d';
+  if (view === '3d' && !surface) {
+    import('./surface3d.js')
+      .then(({ SplSurface }) => { surface = new SplSurface($('surfaceHost')); redraw(); })
+      .catch((err) => {
+        $('surfaceHost').textContent = `3D plot unavailable (${err.message}).`;
+      });
+  }
+  redraw();
+}
 let current = null; // { scene, ref, sums, done, t0 }
 
 // ---------------------------------------------------------------- form
@@ -92,10 +110,12 @@ function redraw() {
   else if (mapMode === 'an') values = anGrid;
   else if (rtGrid && anGrid) { values = rtGrid.map((x, i) => x - anGrid[i]); mode = 'diff'; }
   if (values) {
-    heatmap.set({
+    const map = {
       nu: scene.slice.nu, nv: scene.slice.nv, uAxis: u, vAxis: v, uSize: dims[u], vSize: dims[v],
       values, mode, hits: sums?.gridHits, marker: [src[u], src[v]],
-    });
+    };
+    heatmap.set(map); // also paints the texture used on the 3D room's slice
+    if (mapView === '3d') surface?.set(map, heatmap.range);
   }
 
   const rtLine = sums && current.done > 0 ? toSpl(sums.line) : null;
@@ -223,6 +243,13 @@ function init() {
     ui.stop.disabled = true;
     updateStatus('Stopped');
   });
+  for (const b of document.querySelectorAll('[data-view]')) {
+    b.addEventListener('click', () => setMapView(b.dataset.view));
+  }
+  let savedView = null;
+  try { savedView = localStorage.getItem('gart.mapView'); } catch { /* storage unavailable */ }
+  setMapView(savedView === '2d' ? '2d' : '3d');
+
   for (const b of document.querySelectorAll('[data-map]')) {
     b.addEventListener('click', () => {
       mapMode = b.dataset.map;

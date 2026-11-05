@@ -124,7 +124,7 @@ The original Visual Studio 2019 projects (`Case I`, `Case II`, `Ray-Tracing Meth
 * Presets reproduce Case I, Case II and the anechoic run, plus a horizontal floor-reflection map, a reverberant 6th-order room and a 1 kHz floor/ceiling interference case.
 * Views:
   * 3D room with wall opacity ∝ |R|, sampled ray paths and the SPL slice.
-  * SPL map: ray traced, image source, or the difference between them.
+  * SPL map, as a flat 2D heat map or a rotatable 3D surface (height and colour = SPL): ray traced, image source, or the difference between them.
   * SPL along a receiver line compared with the exact solution.
 
 ### Optional: GitHub Actions CI
