@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Room Acoustics Ray Tracer</title>
+  <meta name="description" content="Interactive geometrical-acoustics ray tracer with phase, running in WebAssembly.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='3' y='3' width='26' height='26' rx='4' fill='none' stroke='%23e8743b' stroke-width='3'/%3E%3Ccircle cx='12' cy='19' r='3' fill='%23e8743b'/%3E%3Cpath d='M12 19 L27 7' stroke='%23e8743b' stroke-width='2'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="style.css">
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="3" width="26" height="26" rx="4"/><circle cx="12" cy="19" r="3"/><path d="M12 19 L27 7"/></svg>
+      <div>
+        <h1>Room Acoustics Ray Tracer</h1>
+        <p>Image-source ray tracing with phase &middot; C++ &rarr; WebAssembly</p>
+      </div>
+    </div>
+    <div class="actions">
+      <label class="preset">Preset
+        <select id="preset"></select>
+      </label>
+      <button id="run" class="primary" type="button">Run</button>
+      <button id="stop" type="button" disabled>Stop</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <aside class="panel controls" id="controls">
+      <details open>
+        <summary>Room</summary>
+        <div class="grid3">
+          <label>Length x<input type="number" name="room.L" step="0.1" min="0.5"></label>
+          <label>Width y<input type="number" name="room.W" step="0.1" min="0.5"></label>
+          <label>Height z<input type="number" name="room.H" step="0.1" min="0.5"></label>
+        </div>
+        <p class="hint">Metres. Origin at a floor corner, z up.</p>
+      </details>
+
+      <details open>
+        <summary>Walls <span class="sub">reflection coefficient R = |R| e<sup>i&phi;</sup></span></summary>
+        <div id="walls" class="walls"></div>
+      </details>
+
+      <details open>
+        <summary>Source</summary>
+        <div class="grid3">
+          <label>x<input type="number" name="source.x" step="0.05"></label>
+          <label>y<input type="number" name="source.y" step="0.05"></label>
+          <label>z<input type="number" name="source.z" step="0.05"></label>
+        </div>
+        <div class="grid2">
+          <label>Frequency (Hz)<input type="number" name="source.freq" step="1" min="10"></label>
+          <label>Power (dB)<input type="number" name="source.powerDb" step="1"></label>
+        </div>
+      </details>
+
+      <details open>
+        <summary>Tracing</summary>
+        <label class="range">Rays <output id="raysOut"></output>
+          <input type="range" name="raysExp" min="4" max="7.7" step="0.1">
+        </label>
+        <div class="grid3">
+          <label>Max order<input type="number" name="maxOrder" min="0" max="30" step="1"></label>
+          <label>Receiver r (m)<input type="number" name="radius" min="0.005" max="1" step="0.005"></label>
+          <label>Seed<input type="number" name="seed" min="0" step="1"></label>
+        </div>
+        <label>Workers<select name="workers" id="workers"></select></label>
+      </details>
+
+      <details open>
+        <summary>SPL map slice</summary>
+        <div class="grid3">
+          <label>Plane<select name="slice.axis">
+            <option value="2">z = const</option>
+            <option value="1">y = const</option>
+            <option value="0">x = const</option>
+          </select></label>
+          <label>At (m)<input type="number" name="slice.offset" step="0.05"></label>
+          <label>Cells / m<input type="number" name="slice.res" min="2" max="40" step="1"></label>
+        </div>
+      </details>
+
+      <details open>
+        <summary>Receiver line</summary>
+        <div class="grid3">
+          <label>x&#8320;<input type="number" name="line.x0" step="0.05"></label>
+          <label>y&#8320;<input type="number" name="line.y0" step="0.05"></label>
+          <label>z&#8320;<input type="number" name="line.z0" step="0.05"></label>
+          <label>x&#8321;<input type="number" name="line.x1" step="0.05"></label>
+          <label>y&#8321;<input type="number" name="line.y1" step="0.05"></label>
+          <label>z&#8321;<input type="number" name="line.z1" step="0.05"></label>
+        </div>
+        <label>Points<input type="number" name="line.n" min="2" max="400" step="1"></label>
+      </details>
+
+      <details>
+        <summary>Display</summary>
+        <label class="range">Ray paths shown <output id="pathsOut"></output>
+          <input type="range" name="paths" min="0" max="400" step="10">
+        </label>
+        <label class="check"><input type="checkbox" name="autoRun"> Re-run automatically on change</label>
+      </details>
+    </aside>
+
+    <section class="panel view3d">
+      <div class="panel-head">
+        <h2>Room</h2>
+        <span class="legend-inline"><i class="dot src"></i>source <i class="dot rcv"></i>receiver line <i class="dash"></i>ray paths</span>
+      </div>
+      <div id="view3d" class="canvas-host"></div>
+    </section>
+
+    <section class="panel heat">
+      <div class="panel-head">
+        <h2>SPL map</h2>
+        <div class="head-controls">
+          <div class="seg" role="radiogroup" aria-label="Map style">
+            <button type="button" data-view="2d">2D</button>
+            <button type="button" data-view="3d" class="on">3D</button>
+          </div>
+          <div class="seg" role="radiogroup" aria-label="Map quantity">
+            <button type="button" data-map="rt" class="on">Ray traced</button>
+            <button type="button" data-map="an">Image source</button>
+            <button type="button" data-map="err">Difference</button>
+          </div>
+        </div>
+      </div>
+      <div class="canvas-host" id="heatHost" hidden><canvas id="heatmap"></canvas><div class="tip" id="heatTip" hidden></div></div>
+      <div class="canvas-host surface-host" id="surfaceHost"><span class="hint-overlay">drag to rotate · scroll to zoom</span></div>
+    </section>
+
+    <section class="panel chart">
+      <div class="panel-head">
+        <h2>Along the receiver line</h2>
+        <span class="legend-inline"><i class="sw rt"></i>ray traced <i class="sw an"></i>image source (exact)</span>
+      </div>
+      <div class="canvas-host"><canvas id="linechart"></canvas><div class="tip" id="lineTip" hidden></div></div>
+    </section>
+  </main>
+
+  <footer class="status" id="status">
+    <span id="stState">Loading WebAssembly…</span>
+    <span><b id="stRays">0</b> rays</span>
+    <span><b id="stRate">–</b> M rays/s</span>
+    <span><b id="stTime">–</b> s</span>
+    <span>line RMS error <b id="stErr">–</b> dB</span>
+    <span><b id="stImages">–</b> image sources</span>
+    <div class="bar"><div id="stBar"></div></div>
+  </footer>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

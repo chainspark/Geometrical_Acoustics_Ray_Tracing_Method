@@ -1,0 +1,5 @@
+{
+  "private": true,
+  "type": "module",
+  "description": "Marks the Emscripten ES6 output (gart.js) as an ES module for Node-based tests."
+}
