@@ -105,7 +105,7 @@
   <main class="layout">
     <aside class="panel controls" id="controls">
       <details open>
-        <summary>Room</summary>
+        <summary data-tip="Size of the shoe-box room in metres. One floor corner is at the origin: x runs along the length, y along the width and z upwards.">Room</summary>
         <div class="grid3">
           <label>Length x<input type="number" name="room.L" step="0.1" min="0.5"></label>
           <label>Width y<input type="number" name="room.W" step="0.1" min="0.5"></label>
@@ -115,12 +115,12 @@
       </details>
 
       <details open>
-        <summary>Walls <span class="sub">reflection coefficient R = |R| e<sup>i&phi;</sup></span></summary>
+        <summary data-tip="How strongly each wall reflects sound. |R| = 1 reflects everything and 0 absorbs everything. The phase φ shifts the reflected wave: 180° inverts it. R is the same at every angle of incidence.">Walls <span class="sub">reflection coefficient R = |R| e<sup>i&phi;</sup></span></summary>
         <div id="walls" class="walls"></div>
       </details>
 
       <details open>
-        <summary>Source</summary>
+        <summary data-tip="An omnidirectional point source; it must be inside the room. The frequency sets the wavelength, and so the spacing of the interference pattern. The power sets the overall level (dB re 1 pW).">Source</summary>
         <div class="grid3">
           <label>x<input type="number" name="source.x" step="0.05"></label>
           <label>y<input type="number" name="source.y" step="0.05"></label>
@@ -133,7 +133,7 @@
       </details>
 
       <details open>
-        <summary>Tracing</summary>
+        <summary data-tip="Rays: more rays give less noise but take longer. Max order: the most wall reflections one ray can make. Receiver r: radius of each spherical receiver; larger means less noise but blurs detail. Seed: changes the random ray directions. Workers: parallel threads used in your browser.">Tracing</summary>
         <label class="range">Rays <output id="raysOut"></output>
           <input type="range" name="raysExp" min="4" max="7.7" step="0.1">
         </label>
@@ -146,7 +146,7 @@
       </details>
 
       <details open>
-        <summary>SPL map slice</summary>
+        <summary data-tip="The plane through the room where the SPL map is computed. Choose its orientation and position, and how many receivers per metre (the map resolution).">SPL map slice</summary>
         <div class="grid3">
           <label>Plane<select name="slice.axis">
             <option value="2">z = const</option>
@@ -159,7 +159,7 @@
       </details>
 
       <details open>
-        <summary>Receiver line</summary>
+        <summary data-tip="A straight line of receivers from point 0 to point 1. The line plot compares the ray-traced and exact SPL along it.">Receiver line</summary>
         <div class="grid3">
           <label>x&#8320;<input type="number" name="line.x0" step="0.05"></label>
           <label>y&#8320;<input type="number" name="line.y0" step="0.05"></label>
@@ -172,7 +172,7 @@
       </details>
 
       <details>
-        <summary>Display</summary>
+        <summary data-tip="How many sample ray paths to draw in the 3D room view, and whether the simulation re-runs automatically after each change.">Display</summary>
         <label class="range">Ray paths shown <output id="pathsOut"></output>
           <input type="range" name="paths" min="0" max="400" step="10">
         </label>
@@ -182,7 +182,7 @@
 
     <section class="panel view3d">
       <div class="panel-head">
-        <h2>Room</h2>
+        <h2 data-tip="3D view of the room. Walls are shaded more strongly the more they reflect. Lines are sample ray paths, and the coloured plane is the SPL map slice. Drag to rotate, scroll to zoom.">Room</h2>
         <span class="legend-inline"><i class="dot src"></i>source <i class="dot rcv"></i>receiver line <i class="dash"></i>ray paths</span>
       </div>
       <div id="view3d" class="canvas-host"></div>
@@ -190,7 +190,7 @@
 
     <section class="panel heat">
       <div class="panel-head">
-        <h2>SPL map</h2>
+        <h2 data-tip="Sound pressure level on the slice plane, as a 2D heat map or a 3D surface. Ray traced is the simulation, Image source is the exact solution, and Difference is ray traced minus exact (dB).">SPL map</h2>
         <div class="head-controls">
           <div class="seg" role="radiogroup" aria-label="Map style">
             <button type="button" data-view="2d">2D</button>
@@ -209,7 +209,7 @@
 
     <section class="panel chart">
       <div class="panel-head">
-        <h2>Along the receiver line</h2>
+        <h2 data-tip="SPL at each receiver on the line: ray traced (orange) against the exact image-source solution (blue). The dips are interference nulls where reflections cancel the direct sound. Hover for values.">Along the receiver line</h2>
         <span class="legend-inline"><i class="sw rt"></i>ray traced <i class="sw an"></i>image source (exact)</span>
       </div>
       <div class="canvas-host"><canvas id="linechart"></canvas><div class="tip" id="lineTip" hidden></div></div>

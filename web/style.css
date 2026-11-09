@@ -132,6 +132,25 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
   font-size: 11px; color: var(--muted);
 }
 
+/* ---- section header tooltips ---- */
+.info {
+  display: inline-grid; place-items: center;
+  width: 16px; height: 16px; padding: 0; margin-left: 6px; vertical-align: 1px;
+  border: 1px solid var(--muted); border-radius: 50%; background: transparent;
+  color: var(--muted); font: italic 600 10px/1 Georgia, "Times New Roman", serif;
+  text-transform: none; letter-spacing: 0; cursor: help; opacity: 0.75;
+}
+.info:hover, .info:focus-visible, [data-tip]:hover > .info { opacity: 1; color: var(--accent); border-color: var(--accent); }
+.hover-tip {
+  position: fixed; z-index: 50; max-width: 300px; pointer-events: none;
+  padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px;
+  background: var(--panel); color: var(--ink);
+  font: 400 12.5px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  text-transform: none; letter-spacing: 0;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+}
+.hover-tip[hidden] { display: none; }
+
 /* ---- about dialog ---- */
 .about {
   width: min(720px, calc(100vw - 32px));

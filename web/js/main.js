@@ -1,6 +1,7 @@
 import { Engine } from './engine.js';
 import { Heatmap } from './heatmap.js';
 import { LineChart } from './linechart.js';
+import { initTooltips } from './tooltips.js';
 import { spl } from './plot-utils.js';
 import {
   PRESETS, DEFAULT_PRESET, WALL_NAMES, check, clone, formatCount, getPath, raysFromExp,
@@ -220,6 +221,7 @@ function onFieldChange(e) {
 
 function init() {
   buildWallControls();
+  initTooltips();
   for (const [key, p] of Object.entries(PRESETS)) ui.preset.add(new Option(p.label, key));
   ui.preset.add(new Option('Custom', ''));
   ui.preset.value = DEFAULT_PRESET;
