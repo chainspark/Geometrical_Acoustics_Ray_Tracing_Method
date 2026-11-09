@@ -132,6 +132,35 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
   font-size: 11px; color: var(--muted);
 }
 
+/* ---- about dialog ---- */
+.about {
+  width: min(720px, calc(100vw - 32px));
+  max-height: calc(100vh - 48px);
+  padding: 22px 26px 18px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--panel);
+  color: var(--ink);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
+  line-height: 1.55;
+}
+.about::backdrop { background: rgba(10, 10, 12, 0.55); }
+.about h2 { margin: 0 32px 10px 0; font-size: 19px; }
+.about h3 {
+  margin: 18px 0 6px; font-size: 12px; text-transform: uppercase;
+  letter-spacing: 0.06em; color: var(--accent);
+}
+.about p, .about li { font-size: 14px; }
+.about p { margin: 0 0 8px; }
+.about .lead { font-size: 15px; }
+.about ol, .about ul { margin: 0 0 8px; padding-left: 20px; }
+.about li { margin-bottom: 4px; }
+.about a { color: var(--an); }
+.about-close { position: absolute; top: 12px; right: 12px; margin: 0; }
+.about-close button { width: 32px; height: 32px; padding: 0; font-size: 20px; line-height: 1; }
+.about-foot { margin-top: 16px !important; padding-top: 12px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px !important; }
+@media (max-width: 760px) { .about { padding: 18px 16px 14px; } }
+
 /* ---- segmented control ---- */
 .seg { display: inline-flex; border: 1px solid var(--line); border-radius: 7px; overflow: hidden; }
 .seg button { border: 0; border-radius: 0; padding: 4px 10px; font-size: 12px; background: transparent; }

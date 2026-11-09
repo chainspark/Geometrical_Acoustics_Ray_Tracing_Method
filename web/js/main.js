@@ -237,6 +237,21 @@ function init() {
     writeForm();
     run();
   });
+  // About dialog: opens on a visitor's first visit, then only from the header button.
+  const about = $('about');
+  $('aboutBtn').addEventListener('click', () => about.showModal());
+  about.addEventListener('click', (e) => { // close on a click on the backdrop
+    if (e.target !== about) return;
+    const r = about.getBoundingClientRect();
+    if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) about.close();
+  });
+  let seenAbout = false;
+  try { seenAbout = localStorage.getItem('gart.seenAbout') === '1'; } catch { /* storage unavailable */ }
+  if (!seenAbout) {
+    about.showModal();
+    try { localStorage.setItem('gart.seenAbout', '1'); } catch { /* storage unavailable */ }
+  }
+
   ui.run.addEventListener('click', run);
   ui.stop.addEventListener('click', () => {
     engine.cancel();

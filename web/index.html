@@ -31,8 +31,76 @@
       </label>
       <button id="run" class="primary" type="button">Run</button>
       <button id="stop" type="button" disabled>Stop</button>
+      <button id="aboutBtn" type="button" aria-haspopup="dialog">About</button>
     </div>
   </header>
+
+  <dialog id="about" class="about" aria-labelledby="aboutTitle">
+    <form method="dialog" class="about-close"><button type="submit" aria-label="Close">&times;</button></form>
+    <h2 id="aboutTitle">About this simulator</h2>
+    <p class="lead">
+      This page simulates how sound behaves inside a rectangular ("shoe-box") room. It uses
+      <b>geometrical acoustics</b>: sound is modelled as rays that travel in straight lines and
+      bounce off the walls. Each ray also carries a <b>phase</b>, so the simulation shows
+      <b>interference</b>. Where the direct sound and a reflection arrive in step they reinforce
+      each other, and where they arrive out of step they cancel.
+    </p>
+    <p>
+      The ray tracer is written in C++ and compiled to <b>WebAssembly</b>, so it runs entirely in
+      your browser. Several Web Workers share the work, which lets the page trace millions of rays
+      per second.
+    </p>
+
+    <h3>How it works</h3>
+    <ol>
+      <li>The source emits rays in uniformly random directions.</li>
+      <li>When a ray hits a wall, it reflects like light off a mirror. Its amplitude and phase are
+        multiplied by that wall's reflection coefficient <i>R</i> = |<i>R</i>| e<sup><i>i&phi;</i></sup>.
+        A reflected ray behaves as if it came from an <b>image source</b> mirrored behind the wall.</li>
+      <li>Receivers are small spheres. Every ray that passes through one adds a complex pressure
+        whose phase is set by the distance it has travelled.</li>
+      <li>The sound pressure level is 20&nbsp;log<sub>10</sub>(|&Sigma;<i>p</i>| / 20&nbsp;&micro;Pa).</li>
+    </ol>
+    <p>
+      For comparison, the page also computes the <b>exact image-source solution</b>: the coherent sum
+      over all image sources up to the same reflection order. With enough rays, the ray-traced
+      result converges to it. The <i>Difference</i> map and the line plot show how close they are.
+    </p>
+
+    <h3>Using the page</h3>
+    <ul>
+      <li><b>Preset</b> loads a ready-made scenario. <i>Case I</i> and <i>Case II</i> are the
+        validation cases: a single reflecting floor, with the receiver moved perpendicular or
+        parallel to it.</li>
+      <li>Change the room, the walls, the source or the frequency. With <i>Re-run automatically</i>
+        on, the results update as you type.</li>
+      <li><b>Room</b> view: the 3D room, with wall shading proportional to |<i>R</i>|, sample ray
+        paths and the SPL slice. Drag to rotate.</li>
+      <li><b>SPL map</b>: the level on a slice through the room, as a 2D heat map or a 3D surface.</li>
+      <li><b>Along the receiver line</b>: ray-traced vs exact SPL. Hover to read values.</li>
+      <li>More rays reduce noise. A larger receiver radius also reduces noise, but blurs fine
+        detail.</li>
+    </ul>
+
+    <h3>Validation</h3>
+    <p>
+      The test suite checks the ray tracer against the exact solution. Case I has an RMS error of
+      about 0.15&nbsp;dB, Case II about 0.4&nbsp;dB, and a free-field (anechoic) case under
+      0.1&nbsp;dB.
+    </p>
+
+    <h3>Limitations</h3>
+    <p>
+      The room must be an axis-aligned box. Reflections are specular (mirror-like), and the
+      reflection coefficients don't depend on the angle of incidence. Scattering, diffraction and
+      air absorption are not modelled.
+    </p>
+
+    <p class="about-foot">
+      Source code, C++ library and command-line tool:
+      <a href="https://github.com/chainspark/Geometrical_Acoustics_Ray_Tracing_Method" target="_blank" rel="noopener">github.com/chainspark/Geometrical_Acoustics_Ray_Tracing_Method</a>
+    </p>
+  </dialog>
 
   <main class="layout">
     <aside class="panel controls" id="controls">
